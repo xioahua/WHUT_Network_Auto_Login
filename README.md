@@ -140,7 +140,7 @@ from selenium.webdriver.common.by import By
 import time
 import requests
 
-# 打开浏览器，填入用户名和密码，点击登陆
+
 def open_broswer_login(sleep_time=5):
     driver = webdriver.Edge()
     driver.get('http://www.whut.edu.cn/')
@@ -156,7 +156,6 @@ def open_broswer_login(sleep_time=5):
     time.sleep(sleep_time)
     driver.quit()
 
-# 判断是否已经能连上网络，如果不能则打开浏览器连网
 def is_net_ok() -> bool:
     for i in range(5):
         print(f'try {i}-th time')
@@ -171,16 +170,18 @@ def is_net_ok() -> bool:
             open_broswer_login()
 
 if __name__ == "__main__":
-    print(__name__)
-    username = "321147"
-    password = "wuxiaohua9077"
+    username = "xxxxx"
+    password = "xxxxx"
+    
+    file = open(r"E:\Pycode\Pytorch\Other\Login_WHUT_Network\log.txt", "a+", encoding="utf8")
+    now_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     
     status = is_net_ok()
     print(status)
     if status:
-        print("Login Successful!")
+        file.write(now_time + '\t' + "Network Connected Successfully!\n")
     else:
-        print("Error!")
+        file.write(now_time + '\t' + "Error!\n")
 ```
 
 ##### 设置开机自动执行
