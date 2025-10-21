@@ -6,7 +6,7 @@
 
 2023年3月更新：此版本已经无法适用。
 
-##### Python脚本
+##### 方法1：Python脚本模拟请求自动登陆
 
 ```python
 import time
@@ -129,16 +129,69 @@ Approximate round trip times in milli-seconds:
 Process finished with exit code 0
 ```
 
+## 方法2：使用Edge浏览器自动化程序(解决方法1经常失败的问题)
+
+参考资料：https://learn.microsoft.com/zh-cn/microsoft-edge/webdriver/?tabs=python
+
+**注意：** 必须安装浏览器驱动程序 (Microsoft Edge WebDriver) ，将其放置到与Py文件相同的位置，否则需要配置驱动程序的Path路径。
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+import requests
+
+# 打开浏览器，填入用户名和密码，点击登陆
+def open_broswer_login(sleep_time=5):
+    driver = webdriver.Edge()
+    driver.get('http://www.whut.edu.cn/')
+    
+    element = driver.find_element(By.ID, 'username')
+    element.send_keys(username)
+    time.sleep(sleep_time)
+    element = driver.find_element(By.ID, 'password')
+    element.send_keys(password)
+    time.sleep(sleep_time)
+    driver.find_element(By.ID, 'login-account').click()
+
+    time.sleep(sleep_time)
+    driver.quit()
+
+# 判断是否已经能连上网络，如果不能则打开浏览器连网
+def is_net_ok() -> bool:
+    for i in range(5):
+        print(f'try {i}-th time')
+        try:
+            status_code = requests.get("https://www.baidu.com").status_code
+            print(status_code)
+            if status_code == 200:
+                return True
+                break
+        except Exception as e:
+            print(f'there is a exception: {e}')
+            open_broswer_login()
+
+if __name__ == "__main__":
+    print(__name__)
+    username = "xxxxxx"
+    password = "xxxxx"
+    
+    status = is_net_ok()
+    print(status)
+    if status:
+        print("Login Successful!")
+    else:
+        print("Error!")
+
 ##### 设置开机自动执行
 
-本人采用的是windows计划任务完成，首先写一个bat批处理命令来自动执行python脚本，然后再将bat加入到windows计划任务中即可。
+本人采用的是windows计划任务完成，首先写一个bat批处理命令来自动执行python脚本，然后再将bat加入到windows计划任务中即可。（该方法无法适用浏览器自动化，即无法打开浏览器窗口）
+因此，将bat批处理文件放到Window启动目录下即可解决，每次电脑开机进系统后会自动登陆。
 
 bat命令脚本如下：
 
 ```bat
 @echo off			#关闭运行命令本身的显示
 start  "connect_Net" "C:\Windows\System32\cmd.exe" 		# 打开cmd程序
-python E:\Pycode\Pytorch\Other\Login.py			# 执行python脚本，需要修改路径
+python E:\Pycode\Pytorch\Other\Login_WHUT_Network\Edge_Network_Login.py		# 执行python脚本，需要修改路径
 taskkill /f /im cmd.exe			# 执行结束后kill掉cmd程序
 exit
 ```
