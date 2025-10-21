@@ -134,6 +134,7 @@ Process finished with exit code 0
 参考资料：https://learn.microsoft.com/zh-cn/microsoft-edge/webdriver/?tabs=python
 
 **注意：** 必须安装浏览器驱动程序 (Microsoft Edge WebDriver) ，将其放置到与Py文件相同的位置，否则需要配置驱动程序的Path路径。
+```python
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -171,8 +172,8 @@ def is_net_ok() -> bool:
 
 if __name__ == "__main__":
     print(__name__)
-    username = "xxxxxx"
-    password = "xxxxx"
+    username = "321147"
+    password = "wuxiaohua9077"
     
     status = is_net_ok()
     print(status)
@@ -180,6 +181,7 @@ if __name__ == "__main__":
         print("Login Successful!")
     else:
         print("Error!")
+```
 
 ##### 设置开机自动执行
 
